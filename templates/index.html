@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dự đoán Adaptivity Level</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div style="display: flex; justify-content: center; min-height:100vh;" class="backgr">
+
+        <div style="width: 70vw; padding: 10px;">
+            <div class="container" style="padding: 30px; margin-top: 10px; margin-bottom: 10px;">
+            <h3 style="margin-bottom: 20px; text-align: center;">Dự đoán mức độ phù hợp của sinh viên với việc học trực tuyến</h3>
+            <form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Tuổi:</label>
+                        <select name="age">
+                            <option value="1-5">1-5</option>
+                            <option value="6-10">6-10</option>
+                            <option value="11-15">11-15</option>
+                            <option value="16-20">16-20</option>
+                            <option value="21-25">21-25</option>
+                            <option value="26-30">26-30</option>
+                        </select>
+
+                        <!-- Giới tính: Radio -->
+                        <label>Giới tính:</label>
+                        <div class="onerow">
+                            <input type="radio" name="gender" value="Boy" /><span>Nam</span> 
+                            <input type="radio" name="gender" value="Girl" /> Nữ
+                        </div>
+
+
+                        <!-- Trình độ: Dropdown -->
+                        <label>Trình độ:</label>
+                        <select name="level">
+                            <option value="School">Học sinh</option>
+                            <option value="College">Cao đẳng</option>
+                            <option value="University">Đại học</option>
+                        </select>
+
+                        <!-- Cơ sở: Dropdown -->
+                        <label>Cơ sở:</label>
+                        <select name="institution">
+                            <option value="Government">Government</option>
+                            <option value="Non Government">Non Government</option>
+                        </select>
+
+                        <!-- Sinh viên CNTT: Radio -->
+                        <label>Sinh viên CNTT:</label>
+                        <div class="onerow">
+                            <input type="radio" name="isITStudent" value="Yes" /><span>Có</span> 
+                            <input type="radio" name="isITStudent" value="No" /> <span>Không</span> 
+                        </div>
+
+
+                        <!-- Vị trí: Radio -->
+                        <label>Vị trí:</label>
+                        <div class="onerow">
+                            <input type="radio" name="position" value="Yes" /> <span>Có</span>
+                            <input type="radio" name="position" value="No" /> <span>Không</span>
+                        </div>
+
+                         <label>Tình trạng điện:</label>
+                        <select name="electricity">
+                            <option value="Low">Thấp</option>
+                            <option value="High">Cao</option>
+                        </select>
+
+
+
+
+                    </div>
+                    <div class="col-md-6">
+                       
+                        <label>Tình trạng tài chính:</label>
+                        <select name="finance">
+                            <option value="Poor">Poor</option>
+                            <option value="Mid">Mid</option>
+                            <option value="Rich">Rich</option>
+                        </select>
+
+                        <label>Loại internet:</label>
+                        <select name="internetType">
+                            <option value="Wifi">Wifi</option>
+                            <option value="Mobile Data">Mobile Data</option>
+                        </select>
+                        <!-- Loại mạng: Dropdown -->
+                        <label>Loại mạng:</label>
+                        <select name="networkType">
+                            <option value="3G">3G</option>
+                            <option value="4G">4G</option>
+                        </select>
+
+
+
+                        <!-- Thời lượng lớp: Dropdown -->
+                        <label>Thời lượng lớp:</label>
+                        <select name="classDuration">
+                            <option value="0">0</option>
+                            <option value="1-3">1-3</option>
+                            <option value="3-6">3-6</option>
+                        </select>
+
+                        <!-- Hệ thống tự học: Radio -->
+                        <label>Hệ thống tự học:</label>
+                        <div class="onerow">
+                            <input type="radio" name="selfLearning" value="Yes" /><span>Có</span>
+                            <input type="radio" name="selfLearning" value="No" /> <span>Không</span>
+
+                        </div>
+
+                        <!-- Thiết bị: Dropdown -->
+                        <label>Thiết bị:</label>
+                        <select name="device">
+                            <option value="Mobile">Mobile</option>
+                            <option value="Tab">Tab</option>
+                            <option value="Computer">Computer</option>
+                        </select>
+                    </div>
+                </div>
+                
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px; background-color: rgb(72, 206, 31); border: none;">Dự đoán</button>
+            </form>
+    
+            <div style="margin-top: 50px;">
+    
+                {% if prediction %}
+                    <h2>Mức độ thích ứng của sinh viên với học trực tuyến: {{ prediction }}</h2>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    </div>
+    
+</body>
+</html>
+<script>
+$(document).ready(function(){
+    $('form').submit(function(e){
+        e.preventDefault(); 
+
+        var formData = $(this).serialize(); 
+
+        $.ajax({
+            url: "/predict", 
+            type: "POST",
+            data: formData,
+            success: function(response){
+                $('div[style="margin-top: 50px;"]').html(
+                    '<h2>Mức độ thích ứng của sinh viên với học trực tuyến: ' + response + '</h2>'
+                );
+            }
+        });
+    });
+});
+</script>
